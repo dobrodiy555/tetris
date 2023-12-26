@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(90deg, rgb(85, 85, 211), rgb(41, 215, 119));
+  height: 100vh;
+  user-select: none;
+  display: flex;
+  flex-direction: column; /* Added to arrange children vertically */
+  justify-content: center;
+  align-items: center;
+
+}
+
+h1 {
+  margin-top: 0px; /* Adjust the margin as needed */
+  margin-bottom: 20px;
+}
+
+.game-container {
+  display: flex;
+}
+
+.tetris {
+  background-color: rgb(19, 19, 177);  
+  padding: 0.5vh;
+  border-radius: 0.5vh;
+  display: grid;
+  grid-template-columns: repeat(10, auto);
+  grid-template-rows: repeat(20, auto);
+}
+
+.tetris div {
+  height: min(4vh, 7vw);
+  width: min(4vh, 7vw);
+  background-color: rgba(97, 75, 75, 0.205);
+  border-radius: 0.3vh;
+  box-shadow: inset 2px 2px 2px rgb(133, 120, 120, 0.271),
+              inset -2px -2px 2px rgb(22, 87, 217, 0.271);
+}
+
+
+
+.tetris .O {
+  background-color: rgb(234, 234, 51);
+}
+
+.tetris .L {
+  background-color: rgb(114, 236, 74);
+}
+
+.tetris .S {
+  background-color: rgb(234, 51, 127);
+}
+
+.tetris .Z {
+  background-color: rgb(74, 236, 206);
+}
+
+.tetris .J {
+  background-color: rgb(12, 1, 32);
+}
+
+.tetris .T {
+  background-color: rgb(56, 153, 78);
+}
+
+.tetris .I {
+  background-color: rgb(241, 35, 35);
+}
+
+
+.results-container {
+  background-color: #c36767; 
+  margin-top: 10px;
+  font-size: 24px;
+  /* padding: 20px; */
+  /* margin-left: 0px; Adjust the margin as needed */
+}
+
+
+#score {
+  color: #fff; /* Example color */
+  margin-bottom: 10px;
+}
