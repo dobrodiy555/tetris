@@ -1,8 +1,9 @@
+/* 
+// variables
+*/
 const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
-
 const TETROMINO_NAMES = ["O", "L", "J", "S", "Z", "T", "I"];
-
 const TETROMINOES = {
   O: [
     [1, 1],
@@ -40,21 +41,29 @@ const TETROMINOES = {
     [0, 0, 0, 0],
   ],
 };
+let playfield, tetromino;
+let score = 0;
+let timeoutId, requestId;
+let isGameOver,
+  isPaused = false;
+const gameOverBlock = document.querySelector(".gameover");
+let cells = document.querySelectorAll(".tetris div");
+const btnRestart = document.querySelector(".restart");
 
+/* 
+// functions
+*/
 function getRandomElement(arr) {
   const randomIndex = Math.floor(Math.random() * arr.length);
   return arr[randomIndex];
 }
-
-let playfield, tetromino;
-let score = 0;
-let timeoutId, requestId;
 
 function convertPositionToIndex(row, column) {
   return row * PLAYFIELD_COLUMNS + column;
 }
 
 function generatePlayfield() {
+  document.querySelector(".tetris").innerHTML = ""; // clear all divs
   for (let i = 0; i < PLAYFIELD_ROWS * PLAYFIELD_COLUMNS; i++) {
     const div = document.createElement("div");
     document.querySelector(".tetris").append(div);
@@ -65,13 +74,9 @@ function generatePlayfield() {
 }
 
 function generateTetromino() {
-  // const nameTetro = "S";
   // choose random figure
   const nameTetro = getRandomElement(TETROMINO_NAMES);
-
   const matrixTetro = TETROMINOES[nameTetro];
-
-  // const columnTetro = 4;
   // to center figure
   const columnTetro = Math.floor(
     (PLAYFIELD_COLUMNS - matrixTetro[0].length) / 2
@@ -84,11 +89,6 @@ function generateTetromino() {
     column: columnTetro,
   };
 }
-
-generatePlayfield();
-generateTetromino();
-
-const cells = document.querySelectorAll(".tetris div");
 
 function drawPlayField() {
   for (let row = 0; row < PLAYFIELD_ROWS; row++) {
@@ -105,7 +105,7 @@ function drawTetromino() {
   const tetrominoMatrixSize = tetromino.matrix.length;
   for (let row = 0; row < tetrominoMatrixSize; row++) {
     for (let column = 0; column < tetrominoMatrixSize; column++) {
-      if (tetromino.row + row < 0) continue; // to enable rowTetro=-2
+      if (isOutsideOfTopBoard(row)) continue; // to enable rowTetro=-2
       if (tetromino.matrix[row][column] == 0) continue; // don't draw classes
       const cellIndex = convertPositionToIndex(
         tetromino.row + row,
@@ -116,7 +116,9 @@ function drawTetromino() {
   }
 }
 
-drawTetromino();
+function isOutsideOfTopBoard(row) {
+  return tetromino.row + row < 0;
+}
 
 function draw() {
   cells.forEach((cell) => cell.removeAttribute("class"));
@@ -124,10 +126,27 @@ function draw() {
   drawTetromino();
 }
 
+function togglePauseGame() {
+  isPaused = !isPaused; // true into false or vice versa
+  if (isPaused) {
+    stopLoop();
+  } else {
+    startLoop();
+  }
+}
+
 document.addEventListener("keydown", onKeyDown);
 
 function onKeyDown(event) {
+  if (event.key == "p") {
+    togglePauseGame();
+  }
+  if (isPaused) return;
+
   switch (event.key) {
+    case " ":
+      dropTetrominoDown();
+      break;
     case "ArrowDown":
       moveTetrominoDown();
       break;
@@ -199,6 +218,10 @@ function placeTetromino() {
   for (let row = 0; row < matrixSize; row++) {
     for (let column = 0; column < matrixSize; column++) {
       if (!tetromino.matrix[row][column]) continue;
+      if (isOutsideOfTopBoard(row)) {
+        isGameOver = true;
+        return;
+      }
       playfield[tetromino.row + row][tetromino.column + column] =
         tetromino.name;
     }
@@ -260,6 +283,9 @@ function moveDown() {
   draw();
   stopLoop();
   startLoop();
+  if (isGameOver) {
+    gameOver();
+  }
 }
 
 function startLoop() {
@@ -273,8 +299,6 @@ function stopLoop() {
   cancelAnimationFrame(requestId);
   timeoutId = clearTimeout(timeoutId);
 }
-
-startLoop();
 
 // rotating part
 function rotateTetromino() {
@@ -297,3 +321,29 @@ function rotateMatrix(matrixTetromino) {
   }
   return rotateMatrix;
 }
+
+function dropTetrominoDown() {
+  while (!isValid()) {
+    tetromino.row++; // goes down
+  }
+  tetromino.row--; // goes one cell up
+}
+
+function gameOver() {
+  stopLoop();
+  gameOverBlock.style.display = "flex";
+}
+
+function init() {
+  gameOverBlock.style.display = "none";
+  isGameOver = false;
+  generatePlayfield();
+  generateTetromino();
+  startLoop();
+  cells = document.querySelectorAll(".tetris div");
+  score = 0;
+  calculateScore();
+}
+
+init();
+btnRestart.addEventListener("click", init);
