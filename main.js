@@ -41,14 +41,30 @@ const TETROMINOES = {
     [0, 0, 0, 0],
   ],
 };
-let playfield, tetromino;
-let score = 0;
-let timeoutId, requestId;
+let playfield, tetromino, timeoutId, requestId;
+let score = 0,
+  lines = 0;
 let isGameOver,
   isPaused = false;
 const gameOverBlock = document.querySelector(".gameover");
 let cells = document.querySelectorAll(".tetris div");
 const btnRestart = document.querySelector(".restart");
+const restBtnVis = document.querySelector(".restBtnVis");
+const bestResSpan = document.querySelector(".bestResSpan");
+const scoreSpan = document.getElementById("score");
+const infoLines = document.getElementById("infoLines");
+const infoPoints = document.getElementById("infoPoints");
+const pauseBtn = document.querySelector(".pauseBtnVis");
+
+// H/W task 3
+const btnArrowLeft = document.querySelector(".arrow-left");
+const btnArrowRight = document.querySelector(".arrow-right");
+btnArrowLeft.addEventListener("click", moveTetrominoLeft);
+btnArrowRight.addEventListener("click", moveTetrominoRight);
+
+// H/W task 2 - restart and pause buttons
+pauseBtn.addEventListener("click", togglePauseGame);
+restBtnVis.addEventListener("click", init);
 
 /* 
 // functions
@@ -136,13 +152,11 @@ function togglePauseGame() {
 }
 
 document.addEventListener("keydown", onKeyDown);
-
 function onKeyDown(event) {
   if (event.key == "p") {
     togglePauseGame();
   }
   if (isPaused) return;
-
   switch (event.key) {
     case " ":
       dropTetrominoDown();
@@ -230,26 +244,48 @@ function placeTetromino() {
   removeFilledRows(filledRows);
   generateTetromino();
   calculateScore(filledRows.length);
+  saveBestResult(score);
 }
 
 function calculateScore(numFilledRows) {
   switch (numFilledRows) {
     case 1:
       score += 10;
+      lines++;
       break;
     case 2:
       score += 30;
+      lines += 2;
       break;
     case 3:
       score += 50;
+      lines += 3;
       break;
     case 4:
-      score += 50;
+      score += 100;
+      lines += 4;
       break;
     default:
       score += 0; // if 0 rows
   }
-  document.getElementById("score").textContent = score;
+  scoreSpan.textContent = score;
+  infoPoints.textContent = score;
+  infoLines.textContent = lines;
+}
+
+// H/W task 6
+function showBestResult() {
+  let bestRes = localStorage.getItem("bestRes");
+  if (bestRes) {
+    bestResSpan.textContent = bestRes;
+  }
+}
+function saveBestResult(score) {
+  let bestRes = localStorage.getItem("bestRes");
+  if (score > bestRes) {
+    localStorage.setItem("bestRes", score);
+    bestResSpan.textContent = score;
+  }
 }
 
 function removeFilledRows(filledRows) {
@@ -293,6 +329,25 @@ function startLoop() {
     () => (requestId = requestAnimationFrame(moveDown)),
     700
   );
+  // the more points the faster it goes down
+  if (score >= 100) {
+    timeoutId = setTimeout(
+      () => (requestId = requestAnimationFrame(moveDown)),
+      600
+    );
+  }
+  if (score >= 200) {
+    timeoutId = setTimeout(
+      () => (requestId = requestAnimationFrame(moveDown)),
+      500
+    );
+  }
+  if (score >= 300) {
+    timeoutId = setTimeout(
+      () => (requestId = requestAnimationFrame(moveDown)),
+      400
+    );
+  }
 }
 
 function stopLoop() {
@@ -334,16 +389,19 @@ function gameOver() {
   gameOverBlock.style.display = "flex";
 }
 
+btnRestart.addEventListener("click", init);
 function init() {
   gameOverBlock.style.display = "none";
   isGameOver = false;
   generatePlayfield();
   generateTetromino();
+  let bestRes = localStorage.getItem("bestRes");
+  showBestResult(bestRes);
   startLoop();
   cells = document.querySelectorAll(".tetris div");
   score = 0;
+  lines = 0;
   calculateScore();
 }
 
 init();
-btnRestart.addEventListener("click", init);

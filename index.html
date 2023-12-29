@@ -12,14 +12,37 @@
 
     <h1>T E T R I S</h1>
 
+    <div class="top-container">
+      <div class="bestResult">
+        Best result: <span class="bestResSpan"></span></div>
+    </div>
+
     <div class="tetris"></div>
 
     <div class="results-container">
-      <p> Points: <span id="score">0</span></p>
+      <div>
+        <p> Points: <span id="score">0</span></p>
+      </div>
+      <div class="restartArea">
+        <button class="restBtnVis">Restart</button>
+        <button class="pauseBtnVis">Pause</button>
+      </div>
     </div>
 
     <div class="gameover">
-      <button class="restart">Restart</button>
+      <div class="restart">
+        <div class="info">
+          <h3>Game results</h3>
+          <p>Lines: <span class="infoRows" id="infoLines"></span></p>
+          <p>Points: <span class="infoRows" id="infoPoints"></span></p>
+        </div>
+        <p>Click here to play again</p>
+      </div>
+    </div>
+
+    <div class="arrow-container">
+      <button class="arrow-btn arrow-left">&#9664;</button>
+      <button class="arrow-btn arrow-right">&#9654;</button>
     </div>
 
     <script src="main.js"></script>

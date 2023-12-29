@@ -5,19 +5,18 @@
 }
 
 body {
-  background: linear-gradient(90deg, rgb(85, 85, 211), rgb(41, 215, 119));
+  background: linear-gradient(90deg, rgb(52, 171, 169), rgb(110, 231, 112));
   height: 100vh;
   user-select: none;
   display: flex;
   flex-direction: column; /* Added to arrange children vertically */
   justify-content: center;
   align-items: center;
-
 }
 
 h1 {
-  margin-top: 0px; /* Adjust the margin as needed */
-  margin-bottom: 20px;
+  font-family: system-ui;
+  color: darkblue;
 }
 
 .game-container {
@@ -41,8 +40,6 @@ h1 {
   box-shadow: inset 2px 2px 2px rgb(133, 120, 120, 0.271),
               inset -2px -2px 2px rgb(22, 87, 217, 0.271);
 }
-
-
 
 .tetris .O {
   background-color: rgb(234, 234, 51);
@@ -72,18 +69,32 @@ h1 {
   background-color: rgb(241, 35, 35);
 }
 
+.top-container {
+  background-color: #c36767; 
+  padding: 2px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
 .results-container {
   background-color: #c36767; 
-  margin-top: 10px;
-  font-size: 24px;
-  /* padding: 20px; */
-  /* margin-left: 0px; Adjust the margin as needed */
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: system-ui;
+  display: flex;
+  gap: 30px;
+  justify-content: space-around;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
+.bestResSpan {
+  color: #fff; 
+}
 
 #score {
-  color: #fff; /* Example color */
+  color: #fff; 
   margin-bottom: 10px;
 }
 
@@ -103,8 +114,88 @@ h1 {
   border-radius: 30px;
   background-color: rgb(162, 187, 79);
   color: white;
-  font-family: Arial;
+  font-family: system-ui;
   text-transform: uppercase;
   font-size: 25px;
   cursor: pointer;
+}
+
+.restBtnVis {
+  background-color: rgb(162, 187, 79);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px;
+  margin: 3px;
+  color: white;
+  text-transform: uppercase;
+  font-family: system-ui;
+  font-weight: bold;
+
+}
+
+.restBtnVis:hover {
+  background-color: rgb(142, 167, 58);
+}
+
+.pauseBtnVis {
+  background-color: rgb(215, 181, 76);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px;
+  margin: 3px;
+  color: white;
+  text-transform: uppercase;
+  font-family: system-ui;
+  font-weight: bold;
+}
+
+.pauseBtnVis:hover {
+  background-color: rgb(196, 168, 83);
+}
+
+.bestResult {
+  font-size: 16px;
+  font-family: system-ui;
+  text-transform: uppercase;
+}
+
+.info {
+  text-align: center;
+  font-size: 20px;
+  color: black;
+}
+
+.infoRows {
+  color: white;
+}
+
+/* H/W task 6 */
+.arrow-btn {
+  width: 40px;
+  height: 33px;
+  background-color: #564caf;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.arrow-btn:hover {
+  background-color: #2a135e;
+}
+
+.arrow-container {
+  display: flex;
+}
+
+.arrow-left {
+  margin-right: 10px;
+}
+
+.arrow-right {
+  margin-left: 10px;
 }
