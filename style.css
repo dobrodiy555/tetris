@@ -14,7 +14,7 @@ body {
   align-items: center;
 }
 
-h1 {
+h2 {
   font-family: system-ui;
   color: darkblue;
 }
@@ -43,6 +43,10 @@ h1 {
 
 .tetris .O {
   background-color: rgb(234, 234, 51);
+} 
+
+.tetris .D {
+  background-color: rgb(220, 131, 37);
 }
 
 .tetris .L {
@@ -173,8 +177,8 @@ h1 {
   color: white;
 }
 
-/* H/W task 6 */
-.arrow-btn {
+
+.arrow-btn, #rotate-btn {
   width: 40px;
   height: 33px;
   background-color: #564caf;
@@ -184,6 +188,7 @@ h1 {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 .arrow-btn:hover {
   background-color: #2a135e;
 }

@@ -10,7 +10,7 @@
 
   <body>
 
-    <h1>T E T R I S</h1>
+    <h2>T E T R I S</h2>
 
     <div class="top-container">
       <div class="bestResult">
@@ -22,6 +22,7 @@
     <div class="results-container">
       <div>
         <p> Points: <span id="score">0</span></p>
+        <p> Level: <span class="infoRows" id="level">1</span></p>
       </div>
       <div class="restartArea">
         <button class="restBtnVis">Restart</button>
@@ -41,8 +42,9 @@
     </div>
 
     <div class="arrow-container">
-      <button class="arrow-btn arrow-left">&#9664;</button>
-      <button class="arrow-btn arrow-right">&#9654;</button>
+      <button class="arrow-btn arrow-left">&larr;</button>
+      <button id="rotate-btn">&#8635;</button>
+      <button class="arrow-btn arrow-right">&rarr;</button>
     </div>
 
     <script src="main.js"></script>

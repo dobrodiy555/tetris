@@ -3,11 +3,16 @@
 */
 const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
-const TETROMINO_NAMES = ["O", "L", "J", "S", "Z", "T", "I"];
+const TETROMINO_NAMES = ["O", "D", "L", "J", "S", "Z", "T", "I"];
 const TETROMINOES = {
   O: [
     [1, 1],
     [1, 1],
+  ],
+  // dot
+  D: [
+    [0, 0],
+    [0, 1],
   ],
   L: [
     [1, 0, 0],
@@ -42,6 +47,7 @@ const TETROMINOES = {
   ],
 };
 let playfield, tetromino, timeoutId, requestId;
+let level = 1;
 let score = 0,
   lines = 0;
 let isGameOver,
@@ -52,19 +58,13 @@ const btnRestart = document.querySelector(".restart");
 const restBtnVis = document.querySelector(".restBtnVis");
 const bestResSpan = document.querySelector(".bestResSpan");
 const scoreSpan = document.getElementById("score");
+const levelSpan = document.getElementById("level");
 const infoLines = document.getElementById("infoLines");
 const infoPoints = document.getElementById("infoPoints");
 const pauseBtn = document.querySelector(".pauseBtnVis");
-
-// H/W task 3
 const btnArrowLeft = document.querySelector(".arrow-left");
 const btnArrowRight = document.querySelector(".arrow-right");
-btnArrowLeft.addEventListener("click", moveTetrominoLeft);
-btnArrowRight.addEventListener("click", moveTetrominoRight);
-
-// H/W task 2 - restart and pause buttons
-pauseBtn.addEventListener("click", togglePauseGame);
-restBtnVis.addEventListener("click", init);
+const rotateBtn = document.getElementById("rotate-btn");
 
 /* 
 // functions
@@ -142,12 +142,15 @@ function draw() {
   drawTetromino();
 }
 
+pauseBtn.addEventListener("click", togglePauseGame);
 function togglePauseGame() {
   isPaused = !isPaused; // true into false or vice versa
   if (isPaused) {
     stopLoop();
+    pauseBtn.textContent = "renew";
   } else {
     startLoop();
+    pauseBtn.textContent = "pause";
   }
 }
 
@@ -189,6 +192,7 @@ function moveTetrominoUp() {
   tetromino.row -= 1;
 }
 
+btnArrowLeft.addEventListener("click", moveTetrominoLeft);
 function moveTetrominoLeft() {
   tetromino.column -= 1;
   if (isValid()) {
@@ -196,6 +200,7 @@ function moveTetrominoLeft() {
   }
 }
 
+btnArrowRight.addEventListener("click", moveTetrominoRight);
 function moveTetrominoRight() {
   tetromino.column += 1;
   if (isValid()) {
@@ -325,28 +330,19 @@ function moveDown() {
 }
 
 function startLoop() {
-  timeoutId = setTimeout(
-    () => (requestId = requestAnimationFrame(moveDown)),
-    700
-  );
-  // the more points the faster it goes down
-  if (score >= 100) {
-    timeoutId = setTimeout(
-      () => (requestId = requestAnimationFrame(moveDown)),
-      600
-    );
-  }
-  if (score >= 200) {
-    timeoutId = setTimeout(
-      () => (requestId = requestAnimationFrame(moveDown)),
-      500
-    );
-  }
-  if (score >= 300) {
-    timeoutId = setTimeout(
-      () => (requestId = requestAnimationFrame(moveDown)),
-      400
-    );
+  // increase level and speed for every 100 points
+  const thresholds = [0, 100, 200, 300, 400, 500, 666];
+  const timeouts = [700, 600, 500, 400, 350, 300, 250];
+  for (let i = thresholds.length - 1; i >= 0; i--) {
+    if (score >= thresholds[i]) {
+      timeoutId = setTimeout(
+        () => (requestId = requestAnimationFrame(moveDown)),
+        timeouts[i]
+      );
+      level = i + 1;
+      levelSpan.textContent = level;
+      break; // Break the loop once the first matching threshold is found
+    }
   }
 }
 
@@ -355,7 +351,7 @@ function stopLoop() {
   timeoutId = clearTimeout(timeoutId);
 }
 
-// rotating part
+rotateBtn.addEventListener("click", rotateTetromino);
 function rotateTetromino() {
   const oldMatrix = tetromino.matrix;
   const rotatedMatrix = rotateMatrix(tetromino.matrix);
@@ -389,7 +385,9 @@ function gameOver() {
   gameOverBlock.style.display = "flex";
 }
 
+// main function
 btnRestart.addEventListener("click", init);
+restBtnVis.addEventListener("click", init);
 function init() {
   gameOverBlock.style.display = "none";
   isGameOver = false;
