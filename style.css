@@ -6,7 +6,7 @@
 
 body {
   background: linear-gradient(90deg, rgb(52, 171, 169), rgb(110, 231, 112));
-  height: 100vh;
+  height: 100vh; /* due to this was big top margin on mobile */
   user-select: none;
   display: flex;
   flex-direction: column; /* Added to arrange children vertically */
@@ -143,6 +143,11 @@ h2 {
   background-color: rgb(142, 167, 58);
 }
 
+.restBtnVis:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .pauseBtnVis {
   background-color: rgb(215, 181, 76);
   border: none;
@@ -178,7 +183,7 @@ h2 {
 }
 
 
-.arrow-btn, #rotate-btn {
+.arrow-btn {
   width: 40px;
   height: 33px;
   background-color: #564caf;
@@ -203,4 +208,11 @@ h2 {
 
 .arrow-right {
   margin-left: 10px;
+  /* margin-right: 10px; */
+}
+
+.arrow-down {
+  margin-left: 10px;
+  padding-top: 10px;
+  padding-left: 12px; 
 }

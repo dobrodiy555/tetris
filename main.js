@@ -64,7 +64,8 @@ const infoPoints = document.getElementById("infoPoints");
 const pauseBtn = document.querySelector(".pauseBtnVis");
 const btnArrowLeft = document.querySelector(".arrow-left");
 const btnArrowRight = document.querySelector(".arrow-right");
-const rotateBtn = document.getElementById("rotate-btn");
+const btnArrowDown = document.querySelector(".arrow-down");
+const rotateBtn = document.querySelector(".rotate-btn");
 
 /* 
 // functions
@@ -147,10 +148,12 @@ function togglePauseGame() {
   isPaused = !isPaused; // true into false or vice versa
   if (isPaused) {
     stopLoop();
-    pauseBtn.textContent = "renew";
+    pauseBtn.textContent = "play";
+    restBtnVis.disabled = true; // to avoid bugs with restart while pausing
   } else {
     startLoop();
     pauseBtn.textContent = "pause";
+    restBtnVis.disabled = false;
   }
 }
 
@@ -160,8 +163,14 @@ function onKeyDown(event) {
     togglePauseGame();
   }
   if (isPaused) return;
+
+  if (event.key == " ") {
+    event.preventDefault(); // without it has bug after restart (figures disappear)
+    dropTetrominoDown();
+  }
+
   switch (event.key) {
-    case " ":
+    case "d":
       dropTetrominoDown();
       break;
     case "ArrowDown":
@@ -373,6 +382,7 @@ function rotateMatrix(matrixTetromino) {
   return rotateMatrix;
 }
 
+btnArrowDown.addEventListener("click", dropTetrominoDown);
 function dropTetrominoDown() {
   while (!isValid()) {
     tetromino.row++; // goes down
